@@ -7,8 +7,8 @@ const getAllTasks = async () => {
 
 const createTask = async (title, description) => {
     const res = await db.query(
-        'INSERT INTO tasks (title, description, status, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NOW()) RETURNING *',
-        [title, description, 'pending']
+        'INSERT INTO tasks (title, description, created_at) VALUES ($1, $2, NOW()) RETURNING *',
+        [title, description]
     );
     return res.rows[0];
 };

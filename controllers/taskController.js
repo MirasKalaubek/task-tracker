@@ -1,6 +1,7 @@
 const Task = require('../models/taskModel');
-const pool = require('../models/db'); // если используешь pool здесь
+const pool = require('../models/db');
 
+// Получение всех задач
 const getTasks = async (req, res) => {
     try {
         const tasks = await Task.getAllTasks();
@@ -10,6 +11,7 @@ const getTasks = async (req, res) => {
     }
 };
 
+// Создание новой задачи
 const createTask = async (req, res) => {
     try {
         const { title, description } = req.body;
@@ -20,13 +22,14 @@ const createTask = async (req, res) => {
     }
 };
 
+// Обновление задачи (убран updated_at)
 const updateTask = async (req, res) => {
     const { id } = req.params;
     const { title, description } = req.body;
 
     try {
         const result = await pool.query(
-            'UPDATE tasks SET title = $1, description = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
+            'UPDATE tasks SET title = $1, description = $2 WHERE id = $3 RETURNING *',
             [title, description, id]
         );
         res.json(result.rows[0]);
@@ -35,6 +38,7 @@ const updateTask = async (req, res) => {
     }
 };
 
+// Удаление задачи
 const deleteTask = async (req, res) => {
     const { id } = req.params;
 
